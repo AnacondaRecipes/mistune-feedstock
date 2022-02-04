@@ -32,7 +32,6 @@ test:
   requires:
     - pytest-cov
     - pip
-    - python <3.10
   imports:
     - mistune
     - mistune.plugins
