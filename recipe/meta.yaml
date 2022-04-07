@@ -10,6 +10,7 @@ source:
 
 build:
   number: 1000
+  # trigger !
   script: python -m pip install --no-deps --ignore-installed .
 
 requirements:
