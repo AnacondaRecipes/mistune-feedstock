@@ -20,7 +20,7 @@ requirements:
     - wheel
   run:
     - python
-    - typing-extensions
+    - typing-extensions  # [py<311]
   run_constrained:
     # 6.1.0 pins to mistune <2 (a future version may loosen this pin)
     # see: https://github.com/conda-forge/nbconvert-feedstock/pull/54
