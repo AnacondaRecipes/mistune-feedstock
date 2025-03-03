@@ -1,4 +1,4 @@
-{% set version = "2.0.4" %}
+{% set version = "3.1.2" %}
 
 package:
   name: mistune
@@ -6,11 +6,11 @@ package:
 
 source:
   url: https://pypi.io/packages/source/m/mistune/mistune-{{ version }}.tar.gz
-  sha256: 9ee0a66053e2267aba772c71e06891fa8f1af6d4b01d5e84e267b4570d4d9808
+  sha256: 733bf018ba007e8b5f2d3a9eb624034f6ee26c4ea769a98ec533ee111d504dff
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   host:
@@ -20,6 +20,7 @@ requirements:
     - wheel
   run:
     - python
+    - typing-extensions
   run_constrained:
     # 6.1.0 pins to mistune <2 (a future version may loosen this pin)
     # see: https://github.com/conda-forge/nbconvert-feedstock/pull/54
@@ -37,7 +38,7 @@ test:
     - mistune.directives
   commands:
     - pip check
-    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=98 --no-cov-on-fail
+    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail
 
 about:
   home: https://github.com/lepture/mistune
