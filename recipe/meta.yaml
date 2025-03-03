@@ -38,6 +38,9 @@ test:
     - mistune.directives
   commands:
     - pip check
+    # UnicodeDecodeError: 'charmap' codec can't decode byte
+    - set PYTHONUTF8=1              # [win]
+    - set PYTHONIOENCODING="UTF-8"  # [win]
     - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail
 
 about:
