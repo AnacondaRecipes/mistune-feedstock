@@ -1,4 +1,4 @@
-{% set version = "3.1.2" %}
+{% set version = "3.2.1" %}
 
 package:
   name: mistune
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/m/mistune/mistune-{{ version }}.tar.gz
-  sha256: 733bf018ba007e8b5f2d3a9eb624034f6ee26c4ea769a98ec533ee111d504dff
+  sha256: 7c8e5501d38bac1582e067e46c8343f17d57ea1aaa735823f3aba1fd59c88a28
 
 build:
   number: 0
@@ -46,7 +46,7 @@ about:
   license_family: BSD
   summary: A sane Markdown parser with useful plugins and renderers.
   dev_url: https://github.com/lepture/mistune
-  doc_url: https://mistune.readthedocs.io
+  doc_url: https://mistune.lepture.com
 
 extra:
   recipe-maintainers:
