@@ -45,6 +45,7 @@ about:
   license: BSD-3-Clause
   license_family: BSD
   summary: A sane Markdown parser with useful plugins and renderers.
+  description: A fast yet powerful Python Markdown parser with renderers and plugins.
   dev_url: https://github.com/lepture/mistune
   doc_url: https://mistune.lepture.com
 
