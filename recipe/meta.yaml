@@ -1,15 +1,17 @@
-{% set version = "3.2.1" %}
+{% set name = "mistune" %}
+{% set version = "3.3.3" %}
 
 package:
-  name: mistune
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/m/mistune/mistune-{{ version }}.tar.gz
-  sha256: 7c8e5501d38bac1582e067e46c8343f17d57ea1aaa735823f3aba1fd59c88a28
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: c4c6c0c840b8637a2e9b8b6d607eb7c8f00888bf14c754409bcd339e848c2477
 
 build:
   number: 0
+  skip: true  # [py<38]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
@@ -22,9 +24,22 @@ requirements:
     - python
     - typing-extensions  # [py<311]
 
+# Ugh!  Windows is *inconsistent* in timing from run to run,
+# time.process_time(): broadly is time taken to render (a number of
+# elements) less than some fixed/relative number?  So these assertions
+# are about *time*
+
+# AssertionError: 0.046875 not less than 0.046875
+{% set tests_to_skip = "test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+# AssertionError: 0.03125 not less than 0.0
+{% set tests_to_skip = tests_to_skip + " or test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
+# AssertionError: 0.015625 not less than 0.0
+{% set tests_to_skip = tests_to_skip + " or test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+#
 test:
   source_files:
     - tests
+    - pyproject.toml
   requires:
     - pytest-cov
     - pip
@@ -37,7 +52,8 @@ test:
     # UnicodeDecodeError: 'charmap' codec can't decode byte
     - set PYTHONUTF8=1              # [win]
     - set PYTHONIOENCODING="UTF-8"  # [win]
-    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail
+    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail  # [not win]
+    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail -k "not ({{ tests_to_skip }})"  # [win]
 
 about:
   home: https://github.com/lepture/mistune
