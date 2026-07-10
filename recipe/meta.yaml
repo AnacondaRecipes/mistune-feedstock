@@ -32,9 +32,9 @@ requirements:
 # AssertionError: 0.046875 not less than 0.046875
 {% set tests_to_skip = "TestMathSecurity.test_repeated_inline_math_openers_are_near_linearq" %}  # [win]
 # AssertionError: 0.03125 not less than 0.0
-{% set tests_to_skip = tests_to_skip + "or TestFormattingSecurity.test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or TestFormattingSecurity.test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
 # AssertionError: 0.015625 not less than 0.0
-{% set tests_to_skip = tests_to_skip + "or TestMathSecurity.test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or TestMathSecurity.test_repeated_inline_math_openers_are_near_linear" %}  # [win]
 #
 test:
   source_files:
