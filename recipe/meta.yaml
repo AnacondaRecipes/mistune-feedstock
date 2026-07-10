@@ -24,6 +24,10 @@ requirements:
     - python
     - typing-extensions  # [py<311]
 
+# Ugh!  Windows is *inconsistent* in doing maths from run to run
+# AssertionError: 0.046875 not less than 0.046875
+{% set tests_to_skip = "TestMathSecurity.test_repeated_inline_math_openers_are_near_linearq" %}  # [win]
+
 test:
   source_files:
     - tests
@@ -40,7 +44,8 @@ test:
     # UnicodeDecodeError: 'charmap' codec can't decode byte
     - set PYTHONUTF8=1              # [win]
     - set PYTHONIOENCODING="UTF-8"  # [win]
-    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail
+    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail  # [not win]
+    - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail -k "not ({{ tests_to_skip }})"  # [win]
 
 about:
   home: https://github.com/lepture/mistune
