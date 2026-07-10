@@ -24,10 +24,18 @@ requirements:
     - python
     - typing-extensions  # [py<311]
 
-# Ugh!  Windows is *inconsistent* in doing maths from run to run
+# Ugh!  Windows is *inconsistent* in timing from run to run,
+# time.process_time(): broadly is time taken to render (a number of
+# elements) less than some fixed/relative number?  So these assertions
+# are about *time*
+
 # AssertionError: 0.046875 not less than 0.046875
 {% set tests_to_skip = "TestMathSecurity.test_repeated_inline_math_openers_are_near_linearq" %}  # [win]
-
+# AssertionError: 0.03125 not less than 0.0
+{% set tests_to_skip = tests_to_skip + "TestFormattingSecurity.test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
+# AssertionError: 0.015625 not less than 0.0
+{% set tests_to_skip = tests_to_skip + "TestMathSecurity.test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+#
 test:
   source_files:
     - tests
