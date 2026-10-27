@@ -1,17 +1,28 @@
 {% set name = "mistune" %}
-{% set version = "3.3.4" %}
+{% set version = "3.4.0" %}
+{% set tests_to_skip = "test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_repeated_inline_math_openers_are_near_linear" %}  # [win]
 
+# Ugh!  Windows is *inconsistent* in timing from run to run,
+# time.process_time(): broadly is time taken to render (a number of
+# elements) less than some fixed/relative number?  So these assertions
+# are about *time*
+# AssertionError: 0.046875 not less than 0.046875
+# AssertionError: 0.03125 not less than 0.0
+# AssertionError: 0.015625 not less than 0.0
+#
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 58b5c96d6fcb61190dfe5fae498d2b2065f99cf61e9649418fd54cf1ada86dfe
+  sha256: 2eaf7952af928ca8d33b779762effc1da517b62c6ad85ec8ca957e3b07b9782a
 
 build:
   number: 0
-  skip: true  # [py<38]
+  skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
@@ -19,23 +30,11 @@ requirements:
     - python
     - pip
     - setuptools
-    - wheel
   run:
     - python
     - typing-extensions  # [py<311]
+    - typing_extensions  # [py<311]
 
-# Ugh!  Windows is *inconsistent* in timing from run to run,
-# time.process_time(): broadly is time taken to render (a number of
-# elements) less than some fixed/relative number?  So these assertions
-# are about *time*
-
-# AssertionError: 0.046875 not less than 0.046875
-{% set tests_to_skip = "test_repeated_inline_math_openers_are_near_linear" %}  # [win]
-# AssertionError: 0.03125 not less than 0.0
-{% set tests_to_skip = tests_to_skip + " or test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
-# AssertionError: 0.015625 not less than 0.0
-{% set tests_to_skip = tests_to_skip + " or test_repeated_inline_math_openers_are_near_linear" %}  # [win]
-#
 test:
   source_files:
     - tests
@@ -50,7 +49,7 @@ test:
   commands:
     - pip check
     # UnicodeDecodeError: 'charmap' codec can't decode byte
-    - set PYTHONUTF8=1              # [win]
+    - set PYTHONUTF8=1  # [win]
     - set PYTHONIOENCODING="UTF-8"  # [win]
     - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail  # [not win]
     - pytest --cov mistune --cov-report=term-missing:skip-covered --cov-fail-under=90 --no-cov-on-fail -k "not ({{ tests_to_skip }})"  # [win]
