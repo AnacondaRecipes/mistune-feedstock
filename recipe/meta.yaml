@@ -1,17 +1,6 @@
 {% set name = "mistune" %}
 {% set version = "3.4.0" %}
-{% set tests_to_skip = "test_repeated_inline_math_openers_are_near_linear" %}  # [win]
-{% set tests_to_skip = tests_to_skip + " or test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
-{% set tests_to_skip = tests_to_skip + " or test_repeated_inline_math_openers_are_near_linear" %}  # [win]
 
-# Ugh!  Windows is *inconsistent* in timing from run to run,
-# time.process_time(): broadly is time taken to render (a number of
-# elements) less than some fixed/relative number?  So these assertions
-# are about *time*
-# AssertionError: 0.046875 not less than 0.046875
-# AssertionError: 0.03125 not less than 0.0
-# AssertionError: 0.015625 not less than 0.0
-#
 package:
   name: {{ name }}
   version: {{ version }}
@@ -33,8 +22,18 @@ requirements:
   run:
     - python
     - typing-extensions  # [py<311]
-    - typing_extensions  # [py<311]
 
+# Ugh!  Windows is *inconsistent* in timing from run to run,
+# time.process_time(): broadly is time taken to render (a number of
+# elements) less than some fixed/relative number?  So these assertions
+# are about *time*
+# AssertionError: 0.046875 not less than 0.046875
+{% set tests_to_skip = "test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+# AssertionError: 0.03125 not less than 0.0
+{% set tests_to_skip = tests_to_skip + " or test_repeated_unclosed_formatting_markers_are_near_linear" %}  # [win]
+# AssertionError: 0.015625 not less than 0.0
+{% set tests_to_skip = tests_to_skip + " or test_repeated_inline_math_openers_are_near_linear" %}  # [win]
+#
 test:
   source_files:
     - tests
